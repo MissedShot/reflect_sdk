@@ -74,3 +74,8 @@ make # Start compilation
 - [winter-linux](https://github.com/Detectoour/winter-linux) - for code and tips
 - [AimTux](https://github.com/AimTuxOfficial/AimTux) - for code and tips
 - Other
+
+## Useful projects
+- [Injector](https://github.com/kubo/injector)
+- [Cartographer](https://github.com/MissedShot/Cartographer)
+- [TraceHid](https://github.com/MissedShot/TracerHid)
