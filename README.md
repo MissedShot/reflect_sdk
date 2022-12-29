@@ -28,7 +28,7 @@ reflect_sdk is a clean base for making full featured csgo software
 Clone repository with following command
 
 ```bash
-git clone https://github.com/MissedShot/linux_sdk.git
+git clone https://github.com/MissedShot/reflect_sdk.git
 ```
 
 ## Compile needed packages
