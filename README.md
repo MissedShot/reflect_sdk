@@ -2,11 +2,26 @@
 
 reflect_sdk is a clean base for making full featured csgo software
 
+## Menu screenshot
+
+![Снимок экрана от 2022-12-29 07-33-37](https://user-images.githubusercontent.com/49341012/209904768-50eee05f-0f89-4341-a984-856efb98b300.png)
+
 ## Features
 
 - BunnyHop
 - Chams
+- Prediction system
+- Config system
 - ImGui menu
+
+## Hooks
+
+- CreateMove
+- FrameStageNotify
+- DrawModelExecute
+- Paint
+- SwapWindow
+- PollEvent
 
 ## Downloading source code
 
@@ -58,3 +73,4 @@ make # Start compilation
 - [Osiris](https://github.com/danielkrupinski/Osiris) - for code and tips
 - [winter-linux](https://github.com/Detectoour/winter-linux) - for code and tips
 - [AimTux](https://github.com/AimTuxOfficial/AimTux) - for code and tips
+- Other
