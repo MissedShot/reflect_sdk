@@ -222,13 +222,13 @@ namespace config {
 	void setup(std::vector< int >* pointer, int size, const std::string& name) {
 		add(pointer, name, _("vector<int>"));
 		pointer->clear();
-		pointer->reserve(size);
+		pointer->resize(size);
 	}
 
 	void setup(std::vector< float >* pointer, int size, const std::string& name) {
 		add(pointer, name, _("vector<float>"));
 		pointer->clear();
-		pointer->reserve(size);
+		pointer->resize(size);
 	}
 
 	void setup(std::vector< std::string >* pointer, const std::string& name) {
