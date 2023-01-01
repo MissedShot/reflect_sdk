@@ -69,7 +69,7 @@ make # Start compilation
 ## Credits
 
 - [csgo-sdk](https://github.com/lagcomp/csgo_sdk) - for original sdk
-- [gamesneeze](https://github.com/seksea/gamesneeze/blob/master/toolbox.sh) - for code and tips
+- [gamesneeze](https://github.com/seksea/gamesneeze) - for code and tips
 - [Osiris](https://github.com/danielkrupinski/Osiris) - for code and tips
 - [winter-linux](https://github.com/Detectoour/winter-linux) - for code and tips
 - [AimTux](https://github.com/AimTuxOfficial/AimTux) - for code and tips
