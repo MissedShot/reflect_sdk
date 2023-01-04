@@ -46,7 +46,7 @@ namespace render {
 
 	void polygon_filled(const std::vector<vec2_t>& points, const col_t& clr);
 
-	bool calculate_box(c_base_entity* ent, vec2_t& pos, vec2_t& size);
+	bool get_entity_bbox(c_base_entity* ent, vec2_t& pos, vec2_t& size);
 
 	extern vec2_t m_screen_size;
 

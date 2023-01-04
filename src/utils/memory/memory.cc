@@ -1,36 +1,30 @@
 #include "../utils.hh"
 
 namespace memory {
-    struct dlinfo_t {
-        std::size_t     size    = 0;
-        std::uintptr_t  address = 0;
-        const char*     library = nullptr;
-    };
-
-    std::vector<dlinfo_t> libraries{};
-
     bool get_library_info(const char* library, std::uintptr_t* address, std::size_t* size) {
-        if (libraries.empty()) {
+        if (m_libraries.empty()) {
             dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void*) {
-                    dlinfo_t library_info = {};
-                    library_info.library = info->dlpi_name;
-                    library_info.address = info->dlpi_addr + info->dlpi_phdr[0].p_vaddr;
-                    library_info.size = info->dlpi_phdr[0].p_memsz;
-                    libraries.push_back(library_info);
+                    dlinfo_t library_info{};
+                    library_info.m_library  = info->dlpi_name;
+                    library_info.m_address  = info->dlpi_addr + info->dlpi_phdr[0].p_vaddr;
+                    library_info.m_size     = info->dlpi_phdr[0].p_memsz;
+                    
+                    m_libraries.push_back(library_info);
+                    
                     return 0;
                 },
                 nullptr);
         }
 
-        for (const dlinfo_t& current : libraries) {
-            if (!strcasestr(current.library, library))
+        for (const dlinfo_t& current : m_libraries) {
+            if (!strcasestr(current.m_library, library))
                 continue;
 
             if (address)
-                *address = current.address;
+                *address = current.m_address;
 
             if (size)
-                *size = current.size;
+                *size = current.m_size;
 
             return true;
         }
@@ -40,10 +34,10 @@ namespace memory {
 
     address_t find_pattern(const char* module, const char* signature) {
         static auto pattern_to_byte = [&](const char* pattern) {
-            std::vector<int> bytes{};
             char* start = const_cast<char*>(pattern);
             char* end   = const_cast<char*>(pattern) + strlen(pattern);
 
+            std::vector<int> bytes{};
             for (char* current_position = start; current_position < end; ++current_position) {
                 if (*current_position == '?') {
                     ++current_position;
@@ -61,8 +55,8 @@ namespace memory {
             return bytes;
         };
 
-        std::uintptr_t module_ptr = 0;
-        std::size_t    size_of_image = 0;
+        std::uintptr_t module_ptr{};
+        std::size_t size_of_image{};
 
         get_library_info(module, &module_ptr, &size_of_image);
 
@@ -88,4 +82,6 @@ namespace memory {
 
         return {};
     }
+
+    std::vector<dlinfo_t> m_libraries{};
 }

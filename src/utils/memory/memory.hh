@@ -102,6 +102,14 @@ namespace memory {
         return nullptr;
     }
 
+    struct dlinfo_t {
+        std::size_t     m_size{};
+        std::uintptr_t  m_address{};
+        const char*     m_library{};
+    };
+
+    extern std::vector<dlinfo_t> m_libraries;
+
     address_t find_pattern(const char *module, const char *signature);
 
 	template <typename t = address_t>

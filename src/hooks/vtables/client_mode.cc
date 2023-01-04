@@ -16,7 +16,7 @@ bool hooks::client_mode::create_move::hook(void* ptr, float frame_time, c_user_c
 
     engine_prediction->process();
     {
-        
+        /* aimbot, etc. here */
     }
     engine_prediction->restore();
 

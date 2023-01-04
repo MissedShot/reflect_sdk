@@ -93,7 +93,13 @@ namespace render {
 
 		c_lock lock;
 
-		/* render stuff here */
+		/* render stuff here
+		only render, store data for render must be in another place
+		FRAME_RENDER_START in FrameStageNotify hook for example
+
+		TODO; find a workaround with ImGui::DrawList override
+		and add an example esp
+		*/
 	}
 
 	void polygon(const std::vector<vec2_t>& points, const col_t& clr) {
@@ -120,14 +126,13 @@ namespace render {
 		m_draw_list->PathFillConvex(clr.hex());
 	}
 
-	bool calculate_box(c_base_entity* ent, vec2_t& pos, vec2_t& size) {
-		vec3_t origin = ent->get_origin();
-
+	bool get_entity_bbox(c_base_entity* ent, vec2_t& pos, vec2_t& size) {
 		static const auto compute_hitbox_surrounding_box = SIG("/client_client.so", "E9 ? ? ? ? 0F 1F 80 00 00 00 00 5B 31 C0 41 5C 5D C3 90 55").relative().cast<bool(*)(void*, vec3_t*, vec3_t*)>();
 
 		vec3_t mins{}, maxs{};
 		compute_hitbox_surrounding_box(ent, &mins, &maxs);
 
+		vec3_t origin = ent->get_origin();
 		mins = vec3_t(origin.x, origin.y, mins.z);
 		maxs = vec3_t(origin.x, origin.y, maxs.z + 8.f);
 

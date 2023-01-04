@@ -28,15 +28,15 @@
 #include "config/config.hh"
 
 namespace utils {
-    // https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
-    inline std::string to_utf8(const std::wstring& wstr) {
+    // https://stackoverflow.com/questions/4804298
+    ALWAYS_INLINE std::string to_utf8(const std::wstring& wstr) {
         using convert_typeX = std::codecvt_utf8<wchar_t>;
         std::wstring_convert<convert_typeX, wchar_t> converterX;
 
         return converterX.to_bytes(wstr);
     }
 
-    inline std::wstring to_unicode(const std::string& str) {
+    ALWAYS_INLINE std::wstring to_unicode(const std::string& str) {
         using convert_typeX = std::codecvt_utf8<wchar_t>;
         std::wstring_convert<convert_typeX, wchar_t> converterX;
 
