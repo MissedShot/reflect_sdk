@@ -27,6 +27,8 @@
 
 #include "config/config.hh"
 
+#include "input/input.hh"
+
 namespace utils {
     // https://stackoverflow.com/questions/4804298
     ALWAYS_INLINE std::string to_utf8(const std::wstring& wstr) {

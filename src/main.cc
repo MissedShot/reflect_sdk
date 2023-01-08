@@ -12,6 +12,7 @@ void init() {
 	hooks::init();
 	config::init();
 	events::init();
+	input::init();
 }
 
 int __attribute__((constructor)) entry_point() {

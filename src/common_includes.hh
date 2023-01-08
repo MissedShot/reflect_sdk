@@ -27,3 +27,5 @@
 #include <SDL2/SDL.h>
 #include <sys/mman.h>
 #include <link.h>
+#include <linux/uinput.h>
+#include <fcntl.h>
