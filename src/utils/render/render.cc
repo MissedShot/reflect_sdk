@@ -140,6 +140,9 @@ namespace render {
 		if (!mins.to_screen(bottom) || !maxs.to_screen(top))
 			return false;
 
+		if (!bottom.is_valid() || !top.is_valid())
+			return false;
+
 		size.y = bottom.y - top.y;
 		size.x = size.y / 2.f;
 		pos.x  = bottom.x - (size.x / 2.f);

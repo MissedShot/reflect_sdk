@@ -71,7 +71,6 @@ qangle_t vec3_t::angle(const vec3_t& up) const {
 	return ret;
 }
 
-// todo;
 bool vec3_t::to_screen(vec2_t& value) const {
 	static const auto& matrix = globals::m_matrix;
 

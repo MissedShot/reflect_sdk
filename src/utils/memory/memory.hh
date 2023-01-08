@@ -1,6 +1,6 @@
 #pragma once
 
-namespace memory { 
+namespace memory {
     template <typename ptr_type = uintptr_t>
     struct address_base_t {
         ptr_type m_ptr{};
@@ -18,10 +18,10 @@ namespace memory {
 
         ALWAYS_INLINE ptr_type get_inner() const { return m_ptr; }
 
-        template <typename t = address_base_t<ptr_type>>
-        ALWAYS_INLINE bool compare(t in) const { return m_ptr == ptr_type(in); }
+        template <typename T = address_base_t<ptr_type>>
+        ALWAYS_INLINE bool compare(T in) const { return m_ptr == ptr_type(in); }
 
-        ALWAYS_INLINE address_base_t<ptr_type>& self_get(uint8_t in = 1) {
+        ALWAYS_INLINE address_base_t<ptr_type>& self_get(uint8_t in = 0x1) {
             m_ptr = get<ptr_type>(in);
 
             return *this;
@@ -33,72 +33,77 @@ namespace memory {
             return *this;
         }
 
-        template <typename t = address_base_t<ptr_type>>
         ALWAYS_INLINE address_base_t<ptr_type>& relative(ptrdiff_t offset = 0x1) {
             m_ptr = jmp(offset);
 
             return *this;
         }
 
-        template <typename t = address_base_t<ptr_type>>
-        ALWAYS_INLINE address_base_t<ptr_type>& set(t in) {
+        template <typename T = address_base_t<ptr_type>>
+        ALWAYS_INLINE address_base_t<ptr_type>& set(T in) {
             m_ptr = ptr_type(in);
 
-            return m_ptr ? *this : t();
+            return m_ptr ? *this : T();
         }
 
-        template <typename t = ptr_type>
-        ALWAYS_INLINE t cast() { return m_ptr ? t(m_ptr) : t(); }
+        template <typename T = ptr_type>
+        ALWAYS_INLINE T cast() { return m_ptr ? T(m_ptr) : T(); }
 
-        template <typename t = address_base_t<ptr_type>>
-        ALWAYS_INLINE t get(uint8_t in = 1) {
+        template <typename T = address_base_t<ptr_type>>
+        ALWAYS_INLINE T get(uint8_t in = 1) {
             ptr_type dummy = m_ptr;
 
             while (in--)
-                /// Check if pointer is still valid
                 if (dummy)
                     dummy = *reinterpret_cast<ptr_type*>(dummy);
 
-            return m_ptr ? t(dummy) : t();
+            return m_ptr ? T(dummy) : T();
         }
 
-        template <typename t = address_base_t<ptr_type>>
-        ALWAYS_INLINE t jmp(ptrdiff_t offset = 0x1) {
-            ptr_type base     = m_ptr + offset;
+        template <typename T = address_base_t<ptr_type>>
+        ALWAYS_INLINE T jmp(ptrdiff_t offset = 0x1) {
+            ptr_type base = m_ptr + offset;
             auto displacement = *reinterpret_cast<int32_t*>(base);
+
             base += sizeof(uint32_t);
             base += displacement;
 
-            return m_ptr ? t(base) : t();
+            return m_ptr ? T(base) : T();
         }
     };
     using address_t = address_base_t<uintptr_t>;
 
-	typedef void* (*instantiate_nterface_fn)();
+    typedef void* (*instantiate_nterface_fn)();
+    // https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/public/tier1/interface.h#L72
     class interface_reg {
     public:
         instantiate_nterface_fn m_create;
-        const char*             m_name;
-        interface_reg*          m_next;
+        const char* m_name;
+        interface_reg* m_next;
     };
 
     template <typename T>
-    ALWAYS_INLINE T* get_interface(const char* file, const char* name, bool includeVersion = false) {
-	    void* lib = dlopen(file, RTLD_NOLOAD | RTLD_NOW | RTLD_LOCAL);
-        if (lib) {
-            interface_reg* interface = *reinterpret_cast<interface_reg**>(dlsym(lib, _("s_pInterfaceRegs")));
+    ALWAYS_INLINE T* get_interface(const char* file, const char* name, bool version_check = false) {
+        void* lib = dlopen(file, RTLD_NOLOAD | RTLD_NOW | RTLD_LOCAL);
+        if (!lib) {
             dlclose(lib);
-
-            for (interface_reg* cur = interface; cur; cur = cur->m_next) {
-                if ((strstr(cur->m_name, name) && strlen(cur->m_name)-3 == strlen(name)) || 
-                    (includeVersion && (strstr(cur->m_name, name) && strlen(cur->m_name) == strlen(name)))) {
-                    T* iface = reinterpret_cast<T*>(cur->m_create());
-                    return iface;
-                }
-            }
+            return nullptr;
         }
 
+        interface_reg* interface = *reinterpret_cast<interface_reg**>(dlsym(lib, _("s_pInterfaceRegs")));
+
         dlclose(lib);
+
+        for (interface_reg* cur = interface; cur; cur = cur->m_next) {
+            if (!version_check && (!strstr(cur->m_name, name) || strlen(cur->m_name) - 3 != strlen(name)))
+                continue;
+
+            if (version_check && (!strstr(cur->m_name, name) || strlen(cur->m_name) != strlen(name)))
+                continue;
+
+            return reinterpret_cast<T*>(cur->m_create());
+        }
+
         return nullptr;
     }
 
@@ -110,10 +115,10 @@ namespace memory {
 
     extern std::vector<dlinfo_t> m_libraries;
 
-    address_t find_pattern(const char *module, const char *signature);
+    address_t find_pattern(const char* module, const char* signature);
 
-	template <typename t = address_t>
-    ALWAYS_INLINE t get_vfunc(address_t pointer, std::size_t index) { return static_cast<t>(pointer.get<t*>()[index]); }
+    template <typename T = address_t>
+    ALWAYS_INLINE T get_vfunc(address_t pointer, std::size_t index) { return (*memory::address_t(pointer).cast<T**>())[index]; }
 }
 
 #define SIG(module_name, sig) memory::find_pattern(_(module_name), _(sig))

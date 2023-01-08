@@ -4,6 +4,9 @@ void c_movement::jump_related() {
 	if (!g_settings.m_misc.m_bhop)
 		return;
 
+	if (!globals::m_local->is_alive())
+		return;
+
 	if (globals::m_local->get_move_type() == MOVE_TYPE_LADDER || globals::m_local->get_move_type() == MOVE_TYPE_NOCLIP)
 		return;
 

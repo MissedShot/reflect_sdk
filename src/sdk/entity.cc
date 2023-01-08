@@ -45,7 +45,7 @@ bool c_cs_player::is_valid() {
 vec3_t c_cs_player::get_bone_pos(int bone) {
 	matrix3x4_t bone_matrix[128]{};
 
-    if(!setup_bones(bone_matrix, 128, 0x0007FF00, 0.0f))
+	if (!setup_bones(bone_matrix, 128, BONE_FLAG_USED_BY_ANYTHING, 0.f))
         return {};
 
 	return bone_matrix[bone].origin();
