@@ -22,6 +22,6 @@ struct sound_info_t {
 
 class i_engine_sound {
 public:
-	VFUNC(emit_sound(const char* sample, float volume, int pitch = PITCH_NORM, int flags = 0, float time = 0.f), 6, void(*)(void*, const char*, float, int, int, float), sample, volume, pitch, flags, time)
-	VFUNC(get_active_sounds(sound_info_t& list), 20, void(*)(void*, sound_info_t&), list)
+	VFUNC(emit_sound(const char* sample, float volume, int pitch = PITCH_NORM, int flags = 0, float time = 0.f), 5, void(*)(void*, const char*, float, int, int, float), sample, volume, pitch, flags, time)
+	VFUNC(get_active_sounds(c_utl_vector<sound_info_t>& list), 19, void(*)(void*, c_utl_vector<sound_info_t>&), list)
 };

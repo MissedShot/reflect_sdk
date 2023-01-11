@@ -61,7 +61,7 @@ bool c_cs_player::can_see_player(const vec3_t& pos, const bool smoke) {
 
 	interfaces::m_trace_system->trace_ray(ray_t(get_eye_pos(), pos), MASK_SHOT | CONTENTS_GRATE, &filter, &tr);
 
-	return tr.m_hit_entity == this || tr.is_visible();
+	return tr.is_visible();
 }
 
 c_base_combat_weapon* c_base_combat_character::get_active_weapon() {
