@@ -12,6 +12,7 @@ reflect_sdk is a clean base for making full featured csgo software
 - Chams
 - Prediction system
 - Config system
+- Input system
 - ImGui menu
 
 ## Hooks
