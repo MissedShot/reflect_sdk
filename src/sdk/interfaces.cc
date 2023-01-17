@@ -18,10 +18,10 @@ namespace interfaces {
         m_game_movement     = memory::get_interface<i_game_movement>(_("./csgo/bin/linux64/client_client.so"), _("GameMovement"));
         m_studio_render     = memory::get_interface<i_studio_render>(_("./bin/linux64/studiorender_client.so"), _("VStudioRender"));
 
-        m_client_mode = memory::get_vfunc(m_client, 10).add(11).relative().cast<i_client_mode* (*)()>()();
-        m_global_vars = memory::get_vfunc(m_client, 11).add(13).relative(0x3).self_get().cast<i_global_vars*>();
+        m_client_mode = memory::get_vfunc(m_client, 10).self_offset(11).self_rel32().cast<i_client_mode* (*)()>()();
+        m_global_vars = *memory::get_vfunc(m_client, 11).self_offset(13).self_rel32(0x3).cast<i_global_vars**>();
 
-        m_move_helper = *SIG("/client_client.so", "00 48 89 3D ? ? ? ? C3").add(0x1).relative(0x3).cast<i_move_helper**>();
+        m_move_helper = *SIG("/client_client.so", "00 48 89 3D ? ? ? ? C3").self_offset(0x1).self_rel32(0x3).cast<i_move_helper**>();
     }
 
     i_base_client_dll*    m_client = nullptr;

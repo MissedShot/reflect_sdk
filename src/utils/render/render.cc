@@ -127,7 +127,7 @@ namespace render {
 	}
 
 	bool get_entity_bbox(c_base_entity* ent, vec2_t& pos, vec2_t& size) {
-		static const auto compute_hitbox_surrounding_box = SIG("/client_client.so", "E9 ? ? ? ? 0F 1F 80 00 00 00 00 5B 31 C0 41 5C 5D C3 90 55").relative().cast<bool(*)(void*, vec3_t*, vec3_t*)>();
+		static const auto compute_hitbox_surrounding_box = SIG("/client_client.so", "E9 ? ? ? ? 0F 1F 80 00 00 00 00 5B 31 C0 41 5C 5D C3 90 55").self_rel32().cast<bool(*)(void*, vec3_t*, vec3_t*)>();
 
 		vec3_t mins{}, maxs{};
 		compute_hitbox_surrounding_box(ent, &mins, &maxs);

@@ -31,7 +31,7 @@ private:
     move_data_t* m_move_data;
 public:
     c_engine_prediction() {
-        m_random_seed = *SIG("/client_client.so", "48 8B 05 ? ? ? ? 8B 38 E8 ? ? ? ? 89 C7").relative(0x3).cast<int**>();
+        m_random_seed = *SIG("/client_client.so", "48 8B 05 ? ? ? ? 8B 38 E8 ? ? ? ? 89 C7").self_rel32(0x3).cast<int**>();
 
         m_move_data = reinterpret_cast<move_data_t*>(malloc(sizeof(move_data_t)));
     }

@@ -43,19 +43,21 @@ void hooks::sdl::swap_window(SDL_Window* window) {
 void hooks::sdl::hook() {
     const auto sdl = dlopen(_("libSDL2-2.0.so.0"), RTLD_LAZY | RTLD_NOLOAD);
 
-    swap_window_address = memory::address_t(dlsym(sdl, _("SDL_GL_SwapWindow"))).add(2).relative(0x0);
+    swap_window_address = memory::address_t(dlsym(sdl, _("SDL_GL_SwapWindow"))).self_offset(2).self_rel32(0x0);
     if (!swap_window_address)
         return;
 
-    swap_window_original                                                  = swap_window_address.get().cast<decltype(swap_window_original)>();
+    swap_window_original                                                  = *swap_window_address.cast<decltype(swap_window_original)*>();
     *reinterpret_cast<decltype(swap_window)**>(swap_window_address.m_ptr) = swap_window;
 
-    poll_event_address = memory::address_t(dlsym(sdl, _("SDL_PollEvent"))).add(2).relative(0x0);
+    poll_event_address = memory::address_t(dlsym(sdl, _("SDL_PollEvent"))).self_offset(2).self_rel32(0x0);
     if (!poll_event_address)
         return;
 
-    poll_event_original                                                 = poll_event_address.get().cast<decltype(poll_event_original)>();
+    poll_event_original                                                 = *poll_event_address.cast<decltype(poll_event_original)*>();
     *reinterpret_cast<decltype(poll_event)**>(poll_event_address.m_ptr) = poll_event;
+
+    dlclose(sdl);
 }
 
 void hooks::sdl::unhook() {

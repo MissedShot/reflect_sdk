@@ -1,77 +1,68 @@
 #pragma once
 
 namespace memory {
-    template <typename ptr_type = uintptr_t>
-    struct address_base_t {
-        ptr_type m_ptr{};
+    struct address_t {
+        uint8_t* m_ptr = nullptr;
 
-        ALWAYS_INLINE address_base_t(): m_ptr{} {}
-        ALWAYS_INLINE address_base_t(ptr_type ptr) : m_ptr(ptr) {}
-        ALWAYS_INLINE address_base_t(ptr_type* ptr) : m_ptr(ptr_type(ptr)) {}
-        ALWAYS_INLINE address_base_t(void* ptr) : m_ptr(ptr_type(ptr)) {}
-        ALWAYS_INLINE address_base_t(const void* ptr) : m_ptr(ptr_type(ptr)) {}
-        ALWAYS_INLINE ~address_base_t() = default;
+        address_t() = default;
+        address_t(uint8_t* ptr) { m_ptr = ptr; };
+        address_t(uintptr_t* ptr) { m_ptr = reinterpret_cast<uint8_t*>(ptr); };
+        address_t(void* ptr) { m_ptr = reinterpret_cast<uint8_t*>(ptr); };
 
-        ALWAYS_INLINE operator ptr_type() const { return m_ptr; }
+        ALWAYS_INLINE operator uint8_t* () const { return m_ptr; }
 
-        ALWAYS_INLINE operator void* () const { return reinterpret_cast<void*>(m_ptr); }
+        template <typename T>
+        ALWAYS_INLINE T cast() const { return (T)(m_ptr); }
 
-        ALWAYS_INLINE ptr_type get_inner() const { return m_ptr; }
+        template <typename T = address_t>
+        ALWAYS_INLINE T offset(ptrdiff_t value) const { return (T)(m_ptr + value); };
 
-        template <typename T = address_base_t<ptr_type>>
-        ALWAYS_INLINE bool compare(T in) const { return m_ptr == ptr_type(in); }
-
-        ALWAYS_INLINE address_base_t<ptr_type>& self_get(uint8_t in = 0x1) {
-            m_ptr = get<ptr_type>(in);
+        ALWAYS_INLINE address_t& self_offset(ptrdiff_t value) {
+            m_ptr += value;
 
             return *this;
         }
 
-        ALWAYS_INLINE address_base_t<ptr_type>& add(ptrdiff_t offset) {
-            m_ptr += offset;
+        template <typename T = address_t>
+        ALWAYS_INLINE T rel8(ptrdiff_t offset = 0x1) const { return (T)(m_ptr + offset + sizeof(uint8_t) + *reinterpret_cast<int8_t*>(m_ptr + offset)); }
+
+        ALWAYS_INLINE address_t& self_rel8(ptrdiff_t offset = 0x1) {
+            m_ptr = rel8(offset);
 
             return *this;
         }
 
-        ALWAYS_INLINE address_base_t<ptr_type>& relative(ptrdiff_t offset = 0x1) {
-            m_ptr = jmp(offset);
+        template <typename T = address_t>
+        ALWAYS_INLINE T rel32(ptrdiff_t offset = 0x1) const { return (T)(m_ptr + offset + sizeof(uint32_t) + *reinterpret_cast<int32_t*>(m_ptr + offset)); }
+
+        ALWAYS_INLINE address_t& self_rel32(ptrdiff_t offset = 0x1) {
+            m_ptr = rel32(offset);
 
             return *this;
         }
 
-        template <typename T = address_base_t<ptr_type>>
-        ALWAYS_INLINE address_base_t<ptr_type>& set(T in) {
-            m_ptr = ptr_type(in);
+        template <typename T = address_t>
+        ALWAYS_INLINE T find_opcode(uint8_t opcode, ptrdiff_t offset = 0) const {
+            auto ptr = m_ptr;
 
-            return m_ptr ? *this : T();
+            while (const auto it = *ptr) {
+                if (opcode == it)
+                    break;
+
+                ptr += 1u;
+            }
+
+            ptr += offset;
+
+            return (T)(ptr);
         }
 
-        template <typename T = ptr_type>
-        ALWAYS_INLINE T cast() { return m_ptr ? T(m_ptr) : T(); }
+        ALWAYS_INLINE address_t& self_find_opcode(uint8_t opcode, ptrdiff_t offset = 0) {
+            m_ptr = find_opcode(opcode, offset);
 
-        template <typename T = address_base_t<ptr_type>>
-        ALWAYS_INLINE T get(uint8_t in = 1) {
-            ptr_type dummy = m_ptr;
-
-            while (in--)
-                if (dummy)
-                    dummy = *reinterpret_cast<ptr_type*>(dummy);
-
-            return m_ptr ? T(dummy) : T();
-        }
-
-        template <typename T = address_base_t<ptr_type>>
-        ALWAYS_INLINE T jmp(ptrdiff_t offset = 0x1) {
-            ptr_type base = m_ptr + offset;
-            auto displacement = *reinterpret_cast<int32_t*>(base);
-
-            base += sizeof(uint32_t);
-            base += displacement;
-
-            return m_ptr ? T(base) : T();
+            return *this;
         }
     };
-    using address_t = address_base_t<uintptr_t>;
 
     typedef void* (*instantiate_nterface_fn)();
     // https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/public/tier1/interface.h#L72
