@@ -12,17 +12,39 @@ namespace math {
 		return std::max(rad_to_deg(acos(view_angles.vector().dot_product(dir))), 0.f);
 	}
 
-	int random_int(int min, int max) {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(min, max);
-        return dis(gen);
+    int random_int(int min, int max) {
+        // load vstdlib handle and validate it.
+        const auto vstdlib = dlopen(_("libvstdlib_client.so"), RTLD_LAZY | RTLD_NOLOAD);
+        if (!vstdlib) {
+            dlclose(vstdlib);
+            return 0;
+        }
+
+        // get RandomInt func from handle.
+        const auto random = reinterpret_cast<int(*)(int min, int max)>(dlsym(vstdlib, _("RandomInt")));
+
+        // close vstdlib handle.
+        dlclose(vstdlib);
+
+        // return what we get.
+        return random(min, max);
     }
 
     float random_float(float min, float max) {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<> dis(min, max);
-        return dis(gen);
+        // load vstdlib handle and validate it.
+        const auto vstdlib = dlopen(_("libvstdlib_client.so"), RTLD_LAZY | RTLD_NOLOAD);
+        if (!vstdlib) {
+            dlclose(vstdlib);
+            return 0.f;
+        }
+
+        // get RandomFloat func from handle.
+        const auto random = reinterpret_cast<float(*)(float min, float max)>(dlsym(vstdlib, _("RandomFloat")));
+
+        // close vstdlib handle.
+        dlclose(vstdlib);
+
+        // return what we get.
+        return random(min, max);
     }
 }
