@@ -2,6 +2,8 @@
 #include "../../sdk/interfaces.hh"
 #include "../../features/features.hh"
 
+#include "deps/liberation.hh"
+
 namespace render {
 	void init(SDL_Window* window) {
 		if (m_initialized)
@@ -13,9 +15,9 @@ namespace render {
 		ImGui_ImplOpenGL3_Init();
 
 		ImGuiIO& io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF(_("/usr/share/fonts/liberation-sans/LiberationSans-Regular.ttf"), 14.0f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+		io.Fonts->AddFontFromMemoryCompressedTTF(LiberationSans_compressed_data, LiberationSans_compressed_size, 14.0f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
 
-		fonts::m_liberation14 = io.Fonts->AddFontFromFileTTF(_("/usr/share/fonts/liberation-sans/LiberationSans-Regular.ttf"), 14.0f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+		fonts::m_liberation14 = io.Fonts->AddFontFromMemoryCompressedTTF(LiberationSans_compressed_data, LiberationSans_compressed_size, 14.0f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
 
 		m_initialized = true;
 	}
