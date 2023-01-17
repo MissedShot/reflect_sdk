@@ -72,7 +72,7 @@ qangle_t vec3_t::angle(const vec3_t& up) const {
 }
 
 bool vec3_t::to_screen(vec2_t& value) const {
-	static const auto& matrix = globals::m_matrix;
+	const auto& matrix = globals::m_matrix;
 
 	value.x = matrix[0].x * x + matrix[0].y * y + matrix[0].z * z + matrix[0].w;
 	value.y = matrix[1].x * x + matrix[1].y * y + matrix[1].z * z + matrix[1].w;

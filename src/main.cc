@@ -16,9 +16,7 @@ void init() {
 }
 
 int __attribute__((constructor)) entry_point() {
-	std::thread thread(init);
-    
-	thread.detach();
-
+	std::thread(init).detach();
+	
     return 0;
 }
