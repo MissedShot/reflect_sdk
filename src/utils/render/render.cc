@@ -58,7 +58,14 @@ namespace render {
 
 		m_draw_list->PushTextureID(font->ContainerAtlas->TexID);
 
-		m_draw_list->AddText(font, font->FontSize, *reinterpret_cast<ImVec2*>(&pos), clr.hex(), txt.data());
+		if (flags.has(FONT_DROP_SHADOW))
+			m_draw_list->AddTextSoftShadow(font, font->FontSize, *reinterpret_cast<ImVec2*>(&pos), clr.hex(), txt.data());
+
+		else if (flags.has(FONT_OUTLINE))
+			m_draw_list->AddTextOutline(font, font->FontSize, *reinterpret_cast<ImVec2*>(&pos), clr.hex(), txt.data());
+
+		else
+			m_draw_list->AddText(font, font->FontSize, *reinterpret_cast<ImVec2*>(&pos), clr.hex(), txt.data());
 
 		m_draw_list->PopTextureID();
 	}
