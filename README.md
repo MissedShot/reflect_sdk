@@ -49,7 +49,7 @@ todo
 ### Arch based distros:
 
 ```bash
-todo
+sudo pacman -S --needed git base-devel cmake
 ```
 
 ## Compilation
