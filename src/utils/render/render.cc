@@ -2,7 +2,7 @@
 #include "../../sdk/interfaces.hh"
 #include "../../features/features.hh"
 
-#include "deps/liberation.hh"
+#include "fonts/liberation.hh"
 
 namespace render {
 	void init(SDL_Window* window) {
