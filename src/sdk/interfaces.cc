@@ -19,9 +19,10 @@ namespace interfaces {
         m_studio_render     = memory::get_interface<i_studio_render>(_("./bin/linux64/studiorender_client.so"), _("VStudioRender"));
 
         m_client_mode = memory::get_vfunc(m_client, 10).self_offset(11).self_rel32().cast<i_client_mode* (*)()>()();
-        m_global_vars = *memory::get_vfunc(m_client, 11).self_offset(13).self_rel32(0x3).cast<i_global_vars**>();
+        m_global_vars = memory::get_vfunc(m_client, 11).self_offset(13).self_rel32(0x3).self_deref().cast<i_global_vars*>();
 
-        m_move_helper = *SIG("/client_client.so", "00 48 89 3D ? ? ? ? C3").self_offset(0x1).self_rel32(0x3).cast<i_move_helper**>();
+        m_move_helper = SIG("/client_client.so", "00 48 89 3D ? ? ? ? C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
+        m_game_rules  = SIG("/client_client.so", "48 8B 05 ? ? ? ? 48 8B 38 0F 84").self_rel32(0x3).self_deref().cast<i_game_rules**>();
     }
 
     i_base_client_dll*    m_client = nullptr;
@@ -42,4 +43,5 @@ namespace interfaces {
     i_prediction*         m_prediction = nullptr;
     i_game_movement*      m_game_movement = nullptr;
     i_studio_render*      m_studio_render = nullptr;
+    i_game_rules**        m_game_rules = nullptr;
 }

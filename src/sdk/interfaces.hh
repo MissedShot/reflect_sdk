@@ -23,4 +23,5 @@ namespace interfaces {
     extern i_prediction*         m_prediction;
     extern i_game_movement*      m_game_movement;
     extern i_studio_render*      m_studio_render;
+    extern i_game_rules**        m_game_rules;
 }

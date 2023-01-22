@@ -62,6 +62,22 @@ namespace memory {
 
             return *this;
         }
+
+        template <typename T = address_t>
+        ALWAYS_INLINE T deref(size_t count = 1u) {
+            auto ptr = m_ptr;
+            
+            for (; ptr && count; --count)
+                ptr = *cast<T*>();
+
+            return (T)(ptr);
+        }
+
+        ALWAYS_INLINE address_t& self_deref(size_t count = 1u) {
+            m_ptr = deref(count);
+
+            return *this;
+        }
     };
 
     typedef void* (*instantiate_nterface_fn)();

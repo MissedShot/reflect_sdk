@@ -1,5 +1,4 @@
 #pragma once
-#include <cstdint>
 
 enum e_send_prop_type {
 	DPT_INT,
