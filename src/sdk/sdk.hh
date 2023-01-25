@@ -40,5 +40,6 @@
 #include "interfaces/i_game_rules.hh"
 #include "interfaces/i_client_state.hh"
 #include "interfaces/i_game_types.hh"
+#include "interfaces/i_cs_player_resource.hh"
 
 #include "entity.hh"

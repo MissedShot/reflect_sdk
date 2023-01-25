@@ -24,29 +24,31 @@ namespace interfaces {
 
         m_client_state = memory::get_vfunc(m_engine, 12).self_offset(9).self_rel32().cast<i_client_state* (*)(int)>()(-1);
 
-        m_move_helper = SIG("/client_client.so", "? 48 89 3D BD 54 20 02 C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
-        m_game_rules  = SIG("/client_client.so", "48 8B 05 1E CE 80 01 48 8B").self_rel32(0x3).self_deref().cast<i_game_rules**>();
+        m_move_helper       = SIG("/client_client.so", "? 48 89 3D BD 54 20 02 C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
+        m_game_rules        = SIG("/client_client.so", "48 8B 05 1E CE 80 01 48 8B").self_rel32(0x3).self_deref().cast<i_game_rules**>();
+        m_player_resource   = SIG("/client_client.so", "48 8B 05 21 E4 A7 01 55 48 89 E5").self_rel32(0x3).cast<i_cs_player_resource**>();
     }
 
-    i_base_client_dll*    m_client = nullptr;
-    i_global_vars*        m_global_vars = nullptr;
-    i_engine_client*      m_engine = nullptr;
-    i_client_entity_list* m_entity_list = nullptr;
-    i_client_mode*        m_client_mode = nullptr;
-    i_model_render*       m_model_render = nullptr;
-    i_material_system*    m_material_system = nullptr;
-    i_engine_trace*       m_trace_system = nullptr;
-    i_cvar_system*        m_cvar_system = nullptr;
-    i_model_info*         m_model_info = nullptr;
-    i_engine_sound*       m_sound = nullptr;
-    i_surface*            m_surface = nullptr;
-    i_localize*           m_localize = nullptr;
-    i_game_event_manager* m_event_manager = nullptr;
-    i_move_helper*        m_move_helper = nullptr;
-    i_prediction*         m_prediction = nullptr;
-    i_game_movement*      m_game_movement = nullptr;
-    i_studio_render*      m_studio_render = nullptr;
-    i_game_rules**        m_game_rules = nullptr;
-    i_client_state*       m_client_state = nullptr;
-    i_game_types*         m_game_types = nullptr;
+    i_base_client_dll*      m_client = nullptr;
+    i_global_vars*          m_global_vars = nullptr;
+    i_engine_client*        m_engine = nullptr;
+    i_client_entity_list*   m_entity_list = nullptr;
+    i_client_mode*          m_client_mode = nullptr;
+    i_model_render*         m_model_render = nullptr;
+    i_material_system*      m_material_system = nullptr;
+    i_engine_trace*         m_trace_system = nullptr;
+    i_cvar_system*          m_cvar_system = nullptr;
+    i_model_info*           m_model_info = nullptr;
+    i_engine_sound*         m_sound = nullptr;
+    i_surface*              m_surface = nullptr;
+    i_localize*             m_localize = nullptr;
+    i_game_event_manager*   m_event_manager = nullptr;
+    i_move_helper*          m_move_helper = nullptr;
+    i_prediction*           m_prediction = nullptr;
+    i_game_movement*        m_game_movement = nullptr;
+    i_studio_render*        m_studio_render = nullptr;
+    i_game_rules**          m_game_rules = nullptr;
+    i_client_state*         m_client_state = nullptr;
+    i_game_types*           m_game_types = nullptr;
+    i_cs_player_resource**  m_player_resource = nullptr;
 }
