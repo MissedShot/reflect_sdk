@@ -38,5 +38,7 @@
 #include "interfaces/i_game_movement.hh"
 #include "interfaces/i_studio_render.hh"
 #include "interfaces/i_game_rules.hh"
+#include "interfaces/i_client_state.hh"
+#include "interfaces/i_game_types.hh"
 
 #include "entity.hh"

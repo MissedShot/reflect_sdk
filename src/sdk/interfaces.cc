@@ -17,12 +17,15 @@ namespace interfaces {
         m_prediction        = memory::get_interface<i_prediction>(_("./csgo/bin/linux64/client_client.so"), _("VClientPrediction001"), true);
         m_game_movement     = memory::get_interface<i_game_movement>(_("./csgo/bin/linux64/client_client.so"), _("GameMovement"));
         m_studio_render     = memory::get_interface<i_studio_render>(_("./bin/linux64/studiorender_client.so"), _("VStudioRender"));
+        m_game_types        = memory::get_interface<i_game_types>(_("./csgo/bin/linux64/matchmaking_client.so"), _("VENGINE_GAMETYPES_VERSION002"), true);
 
         m_client_mode = memory::get_vfunc(m_client, 10).self_offset(11).self_rel32().cast<i_client_mode* (*)()>()();
         m_global_vars = memory::get_vfunc(m_client, 11).self_offset(13).self_rel32(0x3).self_deref().cast<i_global_vars*>();
 
-        m_move_helper = SIG("/client_client.so", "00 48 89 3D ? ? ? ? C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
-        m_game_rules  = SIG("/client_client.so", "48 8B 05 ? ? ? ? 48 8B 38 0F 84").self_rel32(0x3).self_deref().cast<i_game_rules**>();
+        m_client_state = memory::get_vfunc(m_engine, 12).self_offset(9).self_rel32().cast<i_client_state* (*)(int)>()(-1);
+
+        m_move_helper = SIG("/client_client.so", "? 48 89 3D BD 54 20 02 C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
+        m_game_rules  = SIG("/client_client.so", "48 8B 05 1E CE 80 01 48 8B").self_rel32(0x3).self_deref().cast<i_game_rules**>();
     }
 
     i_base_client_dll*    m_client = nullptr;
@@ -44,4 +47,6 @@ namespace interfaces {
     i_game_movement*      m_game_movement = nullptr;
     i_studio_render*      m_studio_render = nullptr;
     i_game_rules**        m_game_rules = nullptr;
+    i_client_state*       m_client_state = nullptr;
+    i_game_types*         m_game_types = nullptr;
 }

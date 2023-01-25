@@ -5,6 +5,9 @@ bool c_cs_player::is_enemy(c_cs_player* from) {
 	if (this == from)
 		return false;
 
+	if (interfaces::m_game_types->get_cur_game_type() == GAME_TYPE_FREEFORALL)
+		return get_survival_team() != from->get_survival_team();
+
 	static const auto mp_teammates_are_enemies = interfaces::m_cvar_system->find_var(_("mp_teammates_are_enemies"));
 	if (mp_teammates_are_enemies->get_int())
 		return true;

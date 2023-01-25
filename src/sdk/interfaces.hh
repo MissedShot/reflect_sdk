@@ -24,4 +24,6 @@ namespace interfaces {
     extern i_game_movement*      m_game_movement;
     extern i_studio_render*      m_studio_render;
     extern i_game_rules**        m_game_rules;
+    extern i_client_state*       m_client_state;
+    extern i_game_types*         m_game_types;
 }
