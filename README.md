@@ -43,7 +43,7 @@ sudo dnf install cmake g++ SDL2-devel
 ### Ubuntu/Debian based distros:
 
 ```bash
-todo
+sudo apt install git cmake gcc g++ libsdl2-dev
 ```
 
 ### Arch based distros:
