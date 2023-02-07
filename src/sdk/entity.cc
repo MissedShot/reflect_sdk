@@ -58,7 +58,7 @@ bool c_cs_player::can_see_player(const vec3_t& pos, const bool smoke) {
 	c_game_trace tr{};
 	c_trace_filter filter(this);
 
-	static const auto is_line_goes_through_smoke = SIG("/client_client.so", "55 48 89 E5 41 56 41 55 41 54 53 48 83 EC 30 66").cast<bool(*)(vec3_t, vec3_t)>();
+	static const auto is_line_goes_through_smoke = SIG("/client_client.so", "55 48 89 E5 41 56 41 55 41 54 53 48 83 EC 30 8B 05 CB 71 E2").cast<bool(*)(vec3_t, vec3_t)>();
 	if (smoke && is_line_goes_through_smoke(get_eye_pos(), pos))
 		return false;
 

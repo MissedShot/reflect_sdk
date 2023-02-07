@@ -24,9 +24,9 @@ namespace interfaces {
 
         m_client_state = memory::get_vfunc(m_engine, 12).self_offset(9).self_rel32().cast<i_client_state* (*)(int)>()(-1);
 
-        m_move_helper       = SIG("/client_client.so", "? 48 89 3D BD 54 20 02 C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
-        m_game_rules        = SIG("/client_client.so", "48 8B 05 1E CE 80 01 48 8B").self_rel32(0x3).self_deref().cast<i_game_rules**>();
-        m_player_resource   = SIG("/client_client.so", "48 8B 05 21 E4 A7 01 55 48 89 E5").self_rel32(0x3).cast<i_cs_player_resource**>();
+        m_move_helper       = SIG("/client_client.so", "? 48 89 3D ? ? ? ? C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
+        m_game_rules        = SIG("/client_client.so", "48 8D 05 AA 50 93 01 48 8B").self_rel32(0x3).cast<i_game_rules**>();
+        m_player_resource   = SIG("/client_client.so", "48 8B 05 C1 88 B1 01 55 48 89 E5").self_rel32(0x3).cast<i_cs_player_resource**>();
     }
 
     i_base_client_dll*      m_client = nullptr;
