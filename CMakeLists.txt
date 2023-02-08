@@ -21,15 +21,19 @@ set(CMAKE_C_FLAGS_DEBUG "${WARNING_FLAGS} ${COMPILE_FLAGS} -g -O0")
 # -std=c++20 | Determine the language standard, also done by CMAKE_CXX_STANDARD above.
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -std=c++20")
 
-# -w    | Inhibit all warning messages.
-# -O2   | Second level of GCC optimization (can use 3, but it can cause some issues).
-set(CMAKE_C_FLAGS_RELEASE "${WARNING_FLAGS} ${COMPILE_FLAGS} -w -O2")
+# -s            | Remove all symbol table and relocation information from the executable.
+# -w            | Inhibit all warning messages.
+# -flto=auto    | This option runs the standard link-time optimizer.
+# -O2           | Second level of GCC optimization (can use 3, but it can cause some issues).
+set(CMAKE_C_FLAGS_RELEASE "${WARNING_FLAGS} ${COMPILE_FLAGS} -s -w -flto=auto -O2")
 
 # -fno-rtti     | Disable generation of information about every class.
 # -std=c++20    | Determine the language standard, also done by CMAKE_CXX_STANDARD above.
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-rtti -std=c++20")
 
-#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined").
+# --no-gnu-unique       | Disable STB_GNU_UNIQUE.
+# -Wl,--no-undefined    | Undefined symbols will be shown as linker errors.
+set(CMAKE_SHARED_LINKER_FLAGS "--no-gnu-unique -Wl,--no-undefined")
 
 # Include our source files to compile.
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/src/*.cc")
