@@ -165,7 +165,7 @@ public:
 	bool 	is_enemy(c_cs_player* from);
 	bool 	is_valid();
 	vec3_t 	get_bone_pos(int bone);
-	bool 	can_see_player(const vec3_t& pos, const bool smoke);
+	bool 	can_see_player(const c_cs_player* player, const vec3_t& pos, const bool smoke);
 };
 
 class c_base_combat_weapon : public c_base_attributable_item {

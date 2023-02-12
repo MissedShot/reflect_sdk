@@ -54,7 +54,7 @@ vec3_t c_cs_player::get_bone_pos(int bone) {
 	return bone_matrix[bone].origin();
 }
 
-bool c_cs_player::can_see_player(const vec3_t& pos, const bool smoke) {
+bool c_cs_player::can_see_player(const c_cs_player* player, const vec3_t& pos, const bool smoke) {
 	c_game_trace tr{};
 	c_trace_filter filter(this);
 
@@ -64,7 +64,7 @@ bool c_cs_player::can_see_player(const vec3_t& pos, const bool smoke) {
 
 	interfaces::m_trace_system->trace_ray(ray_t(get_eye_pos(), pos), MASK_SHOT | CONTENTS_GRATE, &filter, &tr);
 
-	return tr.is_visible();
+	return tr.m_hit_entity == player || tr.is_visible();
 }
 
 c_base_combat_weapon* c_base_combat_character::get_active_weapon() {
