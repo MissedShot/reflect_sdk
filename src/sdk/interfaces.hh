@@ -27,4 +27,6 @@ namespace interfaces {
     extern i_client_state*          m_client_state;
     extern i_game_types*            m_game_types;
     extern i_cs_player_resource**   m_player_resource;
+    extern i_render_view*           m_render_view;
+    extern i_view_render*           m_view_render;
 }

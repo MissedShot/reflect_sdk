@@ -18,6 +18,7 @@ namespace interfaces {
         m_game_movement     = memory::get_interface<i_game_movement>(_("./csgo/bin/linux64/client_client.so"), _("GameMovement"));
         m_studio_render     = memory::get_interface<i_studio_render>(_("./bin/linux64/studiorender_client.so"), _("VStudioRender"));
         m_game_types        = memory::get_interface<i_game_types>(_("./csgo/bin/linux64/matchmaking_client.so"), _("VENGINE_GAMETYPES_VERSION002"), true);
+        m_render_view       = memory::get_interface<i_render_view>(_("./bin/linux64/engine_client.so"), _("VEngineRenderView"));
 
         m_client_mode = memory::get_vfunc(m_client, 10).self_offset(11).self_rel32().cast<i_client_mode* (*)()>()();
         m_global_vars = memory::get_vfunc(m_client, 11).self_offset(13).self_rel32(0x3).self_deref().cast<i_global_vars*>();
@@ -27,6 +28,7 @@ namespace interfaces {
         m_move_helper       = SIG("/client_client.so", "? 48 89 3D ? ? ? ? C3").self_offset(0x1).self_rel32(0x3).self_deref().cast<i_move_helper*>();
         m_game_rules        = SIG("/client_client.so", "48 8D 05 AA 50 93 01 48 8B").self_rel32(0x3).cast<i_game_rules**>();
         m_player_resource   = SIG("/client_client.so", "48 8B 05 C1 88 B1 01 55 48 89 E5").self_rel32(0x3).cast<i_cs_player_resource**>();
+        m_view_render       = SIG("/client_client.so", "48 8D 3D 3F E9 60 06 48 8B 10 48 89 08").self_rel32(0x3).cast<i_view_render*>();
     }
 
     i_base_client_dll*      m_client = nullptr;
@@ -51,4 +53,6 @@ namespace interfaces {
     i_client_state*         m_client_state = nullptr;
     i_game_types*           m_game_types = nullptr;
     i_cs_player_resource**  m_player_resource = nullptr;
+    i_render_view*          m_render_view = nullptr;
+    i_view_render*          m_view_render = nullptr;
 }

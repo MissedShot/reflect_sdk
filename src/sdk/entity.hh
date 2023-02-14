@@ -130,6 +130,10 @@ public:
 	NETVAR(get_aim_punch_angle(), qangle_t, "CBasePlayer->m_aimPunchAngle")
 	NETVAR(get_aim_punch_angle_vel(), vec3_t, "CBasePlayer->m_aimPunchAngleVel")
 	NETVAR(get_view_model(), c_base_handle, "CBasePlayer->m_hViewModel[0]")
+	NETVAR(get_fov(), int, "CBasePlayer->m_iFOV")
+	NETVAR(get_default_fov(), int, "CBasePlayer->m_iDefaultFOV")
+
+	VFUNC_SIG(has_c4(), "/client_client.so", "55 48 89 E5 41 54 53 48 89 FB E8 C1 C1", bool(*)(void*))
 
 	ALWAYS_INLINE bool is_alive() { return get_life_state() == LIFE_ALIVE && get_health(); }
 
