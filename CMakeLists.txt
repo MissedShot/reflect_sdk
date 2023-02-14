@@ -10,8 +10,10 @@ set(WARNING_FLAGS "-Wno-deprecated-declarations -Wfatal-errors")
 # -march=native         | Specify the name of the target architecture.
 # -mtune=native         | Specify the name of the target processor.
 # -fvisibility=hidden   | Set the default ELF image symbol visibility.
-set(COMPILE_FLAGS "-march=native -mtune=native -fvisibility=hidden")
+# -fPIC                 | If supported for the target machine, emit position-independent code.
+set(COMPILE_FLAGS "-march=native -mtune=native -fvisibility=hidden -fPIC")
 
+# Set C++ language standard.
 set(CMAKE_CXX_STANDARD 20)
 
 # -g    | Produce debugging information in the operating system’s native format.

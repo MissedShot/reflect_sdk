@@ -159,13 +159,12 @@ public:
 	NETVAR(get_shots_fired(), int, "CCSPlayer->m_iShotsFired")
 	NETVAR(get_survival_team(), int, "CCSPlayer->m_nSurvivalTeam")
 	NETVAR_OFFSET(get_flash_alpha(), float, "CCSPlayer->m_flFlashMaxAlpha", -0x8)
-		
+	
 	player_info_t get_info();
+	vec3_t 		  get_bone_pos(int bone);
 
 	bool 	is_enemy(c_cs_player* from);
-	bool 	is_valid();
-	vec3_t 	get_bone_pos(int bone);
-	bool 	can_see_player(const c_cs_player* player, const vec3_t& pos, const bool smoke);
+	bool 	is_visible(c_cs_player* from, const vec3_t pos, const bool smoke);
 };
 
 class c_base_combat_weapon : public c_base_attributable_item {
@@ -189,8 +188,6 @@ public:
 	VFUNC(get_cs_weapon_data(), 529, c_cs_weapon_data*(*)(void*))
 
 	ALWAYS_INLINE bool is_knife() { return (get_cs_weapon_data()->m_weapon_type == WEAPON_TYPE_KNIFE && get_item_definition_index() != WEAPON_ZEUS_X27); }
-
-	bool invalid_weapon();
 
 	std::wstring get_name();
 };
