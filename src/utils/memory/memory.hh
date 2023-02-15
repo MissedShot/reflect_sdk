@@ -80,40 +80,6 @@ namespace memory {
         }
     };
 
-    typedef void* (*instantiate_nterface_fn)();
-    // https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/public/tier1/interface.h#L72
-    class interface_reg {
-    public:
-        instantiate_nterface_fn m_create;
-        const char* m_name;
-        interface_reg* m_next;
-    };
-
-    template <typename T>
-    ALWAYS_INLINE T* get_interface(const char* file, const char* name, bool version_check = false) {
-        void* lib = dlopen(file, RTLD_NOLOAD | RTLD_NOW | RTLD_LOCAL);
-        if (!lib) {
-            dlclose(lib);
-            return nullptr;
-        }
-
-        interface_reg* interface = *reinterpret_cast<interface_reg**>(dlsym(lib, _("s_pInterfaceRegs")));
-
-        dlclose(lib);
-
-        for (interface_reg* cur = interface; cur; cur = cur->m_next) {
-            if (!version_check && (!strstr(cur->m_name, name) || strlen(cur->m_name) - 3 != strlen(name)))
-                continue;
-
-            if (version_check && (!strstr(cur->m_name, name) || strlen(cur->m_name) != strlen(name)))
-                continue;
-
-            return reinterpret_cast<T*>(cur->m_create());
-        }
-
-        return nullptr;
-    }
-
     struct dlinfo_t {
         std::size_t     m_size{};
         std::uintptr_t  m_address{};
@@ -123,6 +89,8 @@ namespace memory {
     extern std::vector<dlinfo_t> m_libraries;
 
     address_t find_pattern(const char* module, const char* signature);
+
+    address_t get_interface(const char* file, const char* name);
 
     template <typename T = address_t>
     ALWAYS_INLINE T get_vfunc(address_t pointer, std::size_t index) { return (*memory::address_t(pointer).cast<T**>())[index]; }

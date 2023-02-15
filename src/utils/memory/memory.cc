@@ -83,5 +83,42 @@ namespace memory {
         return {};
     }
 
+    typedef void* (*instantiate_nterface_fn)();
+    // https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/public/tier1/interface.h#L72
+    class interface_reg {
+    public:
+        instantiate_nterface_fn m_create;
+        const char* m_name;
+        interface_reg* m_next;
+    };
+
+    address_t get_interface(const char* file, const char* name) {
+        // map handle of shared object that contains interface.
+        void* lib = dlopen(file, RTLD_NOLOAD | RTLD_NOW | RTLD_LOCAL);
+
+        // something go wrong
+        // unmap and return here.
+        if (!lib) {
+            dlclose(lib);
+            return address_t();
+        }
+
+        // https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/tier1/interface.cpp#L46
+        interface_reg* interface = *reinterpret_cast<interface_reg**>(dlsym(lib, _("s_pInterfaceRegs")));
+
+        // unmap, don't need it anymore.
+        dlclose(lib);
+
+        // loop through each interface in interfaceReg linked list
+        for (interface_reg* cur = interface; cur; cur = cur->m_next) {
+            if (!strstr(cur->m_name, name) || strlen(cur->m_name) != strlen(name))
+                continue;
+
+            return reinterpret_cast<address_t*>(cur->m_create());
+        }
+
+        return address_t();
+    }
+
     std::vector<dlinfo_t> m_libraries{};
 }
